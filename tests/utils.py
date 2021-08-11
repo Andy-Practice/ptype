@@ -2,7 +2,7 @@ from collections import Counter, OrderedDict
 import glob
 import numpy as np
 import pandas as pd
-
+import datetime # AL-Added to timestamp output files. 
 
 def evaluate_model_type(annotations, predictions):
     types = ["integer", "string", "float", "boolean", "date"]
@@ -65,13 +65,14 @@ def evaluate_predictions(annotations, type_predictions):
     column_type_evaluations = "tests/column_type_evaluations.csv"
     expected = pd.read_csv(column_type_evaluations, index_col=0)
 
-    # AL-Added so that the model results are returned as a dataframe
-    return df
     # AL-Added so that model evaluations are always exported to a unique, timestamped csv file.  
     now = datetime.datetime.now()
     outputfilename = 'column_type_evaluations-'+now.strftime("%y%m%d-%H%M%S")+'.csv'
     df.to_csv(path_or_buf='tests/'+outputfilename)
-    
+
+    # AL-Added so that the model results are returned as a dataframe
+    return df
+        
     # if not expected.equals(df):        
     #     df.to_csv(path_or_buf=column_type_evaluations + ".new")
     #     raise Exception(f"{column_type_evaluations} comparison failed.")
