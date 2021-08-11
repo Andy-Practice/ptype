@@ -64,9 +64,17 @@ def evaluate_predictions(annotations, type_predictions):
     df = df2.append(df1)
     column_type_evaluations = "tests/column_type_evaluations.csv"
     expected = pd.read_csv(column_type_evaluations, index_col=0)
-    if not expected.equals(df):
-        df.to_csv(path_or_buf=column_type_evaluations + ".new")
-        raise Exception(f"{column_type_evaluations} comparison failed.")
+
+    # AL-Added so that the model results are returned as a dataframe
+    return df
+    # AL-Added so that model evaluations are always exported to a unique, timestamped csv file.  
+    now = datetime.datetime.now()
+    outputfilename = 'column_type_evaluations-'+now.strftime("%y%m%d-%H%M%S")+'.csv'
+    df.to_csv(path_or_buf='tests/'+outputfilename)
+    
+    # if not expected.equals(df):        
+    #     df.to_csv(path_or_buf=column_type_evaluations + ".new")
+    #     raise Exception(f"{column_type_evaluations} comparison failed.")
 
 
 def float_2dp(n: float):
@@ -89,7 +97,10 @@ def get_evaluations(_annotations, _predictions):
             tp, fp, fn = 0.0, 0.0, 0.0
             for dataset_name in dataset_names:
                 temp = evaluate_model_type(
-                    _annotations[dataset_name], _predictions[dataset_name].values()
+                    # AL - Following ammended, as my code passes a dictionary object indexed by dataset_name
+                    #_annotations[dataset_name], _predictions[dataset_name].values()
+                    _annotations[dataset_name], _predictions[dataset_name]#.values()
+
                 )
                 tp += temp[t]["TP"]
                 fp += temp[t]["FP"]
@@ -110,7 +121,9 @@ def get_type_counts(predictions, annotations):
     for dataset_name in predictions:
 
         true_values = annotations[dataset_name]
-        ptype_predictions = predictions[dataset_name].values()
+        # AL - Following ammended, as my code passes a dictionary object indexed by dataset_name
+        #ptype_predictions = predictions[dataset_name].values()
+        ptype_predictions = predictions[dataset_name] # .values()
 
         true_values = [
             true_value.replace("date-eu", "date")
