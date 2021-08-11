@@ -113,7 +113,7 @@ def get_evaluations(_annotations, _predictions,option='dates_together'):
                 temp = evaluate_model_type(
                     # AL - Following ammended, as my code passes a dictionary object indexed by dataset_name
                     #_annotations[dataset_name], _predictions[dataset_name].values()
-                    _annotations[dataset_name], _predictions[dataset_name]#.values()
+                    _annotations[dataset_name], _predictions[dataset_name],option=option#.values()
 
                 )
                 tp += temp[t]["TP"]
