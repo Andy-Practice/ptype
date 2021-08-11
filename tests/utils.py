@@ -180,7 +180,7 @@ def get_type_counts(predictions, annotations,option='dates_together'):
         }
 
     total_cols = sum(
-        [total_test[t] for t in ["boolean", "date", "float", "integer", "string"]]
+        [total_test[t] for t in _types]
     )
 
     return [total_test, dataset_counts, total_cols]
