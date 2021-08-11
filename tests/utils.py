@@ -4,24 +4,33 @@ import numpy as np
 import pandas as pd
 import datetime # AL-Added to timestamp output files. 
 
-def evaluate_model_type(annotations, predictions):
-    types = ["integer", "string", "float", "boolean", "date"]
+# AL-Updated functions to allow user to specify whether they want results with all date types presented
+# together (option='dates_together') or individually (option='dates_separate'). The former is the default.
+
+def evaluate_model_type(annotations, predictions,option='dates_together'):
+
+    if option == 'dates_separate':
+        types = ["boolean", "float", "integer", "string","date-iso-8601", "date-eu","date-non-std-subtype","date-non-std"]
+    else: 
+        types = ["boolean", "date", "float", "integer", "string"]
+
     type_rates = {t: {"TP": 0, "FP": 0, "TN": 0, "FN": 0} for t in types}
 
-    predictions = [
-        prediction.replace("date-eu", "date")
-        .replace("date-iso-8601", "date")
-        .replace("date-non-std-subtype", "date")
-        .replace("date-non-std", "date")
-        for prediction in predictions
-    ]
-    annotations = [
-        annotation.replace("date-eu", "date")
+    if not option == 'dates_separate':
+        predictions = [
+            prediction.replace("date-eu", "date")
             .replace("date-iso-8601", "date")
             .replace("date-non-std-subtype", "date")
             .replace("date-non-std", "date")
-        for annotation in annotations
-    ]
+            for prediction in predictions
+        ]
+        annotations = [
+            annotation.replace("date-eu", "date")
+            .replace("date-iso-8601", "date")
+            .replace("date-non-std-subtype", "date")
+            .replace("date-non-std", "date")
+            for annotation in annotations
+        ]
 
     # find columns whose types are not supported by ptype
     ignored_columns = np.where(
@@ -47,11 +56,11 @@ def evaluate_model_type(annotations, predictions):
     return type_rates
 
 
-def evaluate_predictions(annotations, type_predictions):
+def evaluate_predictions(annotations, type_predictions,option='dates_together'):
     # the column type counts of the datasets
-    [_, _, total_cols] = get_type_counts(type_predictions, annotations)
+    [_, _, total_cols] = get_type_counts(type_predictions, annotations,option)
 
-    Js, overall_accuracy = get_evaluations(annotations, type_predictions)
+    Js, overall_accuracy = get_evaluations(annotations, type_predictions,option)
     overall_accuracy_to_print = {
         method: {"overall-accuracy": float_2dp(overall_accuracy[method] / total_cols)}
         for method in overall_accuracy
@@ -83,10 +92,14 @@ def float_2dp(n: float):
     return np.float64("{:.2f}".format(n))
 
 
-def get_evaluations(_annotations, _predictions):
+def get_evaluations(_annotations, _predictions,option='dates_together'):
     methods = ["ptype"]
     dataset_names = list(_predictions.keys())
-    types = ["boolean", "date", "float", "integer", "string"]
+
+    if option == 'dates_separate':
+        types = types = ["boolean", "float", "integer", "string","date-iso-8601", "date-eu","date-non-std-subtype","date-non-std"]
+    else:
+        types = ["boolean", "date", "float", "integer", "string"]
 
     Js = {}
     overall_accuracy = {method: 0 for method in methods}
@@ -114,8 +127,13 @@ def get_evaluations(_annotations, _predictions):
     return Js, overall_accuracy
 
 
-def get_type_counts(predictions, annotations):
-    _types = ["boolean", "date", "float", "integer", "string"]
+def get_type_counts(predictions, annotations,option='dates_together'):
+    
+    if option == 'dates_separate':
+        _types = ["boolean", "float", "integer", "string","date-iso-8601", "date-eu","date-non-std-subtype","date-non-std"]
+    else: 
+        _types = ["boolean", "date", "float", "integer", "string"]
+    
     dataset_counts = OrderedDict()
     total_test = {t: 0 for t in _types}
 
@@ -126,20 +144,21 @@ def get_type_counts(predictions, annotations):
         #ptype_predictions = predictions[dataset_name].values()
         ptype_predictions = predictions[dataset_name] # .values()
 
-        true_values = [
-            true_value.replace("date-eu", "date")
-            .replace("date-iso-8601", "date")
-            .replace("date-non-std-subtype", "date")
-            .replace("date-non-std", "date")
-            for true_value in true_values
-        ]
-        ptype_predictions = [
-            prediction.replace("date-eu", "date")
-            .replace("date-iso-8601", "date")
-            .replace("date-non-std-subtype", "date")
-            .replace("date-non-std", "date")
-            for prediction in ptype_predictions
-        ]
+        if not option == 'dates_separate':
+            true_values = [
+                true_value.replace("date-eu", "date")
+                .replace("date-iso-8601", "date")
+                .replace("date-non-std-subtype", "date")
+                .replace("date-non-std", "date")
+                for true_value in true_values
+            ]
+            ptype_predictions = [
+               prediction.replace("date-eu", "date")
+                .replace("date-iso-8601", "date")
+                .replace("date-non-std-subtype", "date")
+                .replace("date-non-std", "date")
+                for prediction in ptype_predictions
+            ]
 
         ignored_columns = np.where(
             (np.array(true_values) != "all identical")
