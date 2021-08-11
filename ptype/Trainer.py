@@ -1,6 +1,7 @@
 from copy import deepcopy
 from scipy import optimize
 import numpy as np
+import pandas as pd # AL-Added to get around the issue with np.unique() when initialising Trainer object. 
 from ptype.Column import MISSING_INDEX, ANOMALIES_INDEX
 from ptype.Machine import PI
 from ptype.utils import (
