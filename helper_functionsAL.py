@@ -18,6 +18,6 @@ def quick_timestamp():
 
 
 def test_function():
-    for i in range(0,2):
+    for i in range(0,3):
         print('Hi! my name is,')
     print('Chika chika slim shady.')
