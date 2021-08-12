@@ -65,7 +65,7 @@ def llhoods_with_precision(llhoods, prec=40):
 
 def contains_all(_str, _list):
     print('_str:',_str,'type',type(_str))
-    print('_list',_list,'type',type(_list))
+    # print('_list',_list,'type',type(_list))
     res = True
     for s in _str:
         if s not in _list:
