@@ -1,12 +1,12 @@
 
-from ptype import Column
-from ptype.Column import (
-    ANOMALIES_INDEX,
-    MISSING_INDEX,
-    TYPE_INDEX,
-    Column,
-    _get_unique_vals,
-)
+# from ptype import Column
+# from ptype.Column import (
+#     ANOMALIES_INDEX,
+#     MISSING_INDEX,
+#     TYPE_INDEX,
+#     Column,
+#     _get_unique_vals,
+# )
 
 import datetime
 
