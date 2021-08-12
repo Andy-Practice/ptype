@@ -315,8 +315,8 @@ class Machine(object):
 
         for unique_value in unique_values:
             print('debug check - Machine.set_unique_values()')
-            #print(unique_value)
-            #print(self.alphabet)
+            print(unique_value)
+            print(self.alphabet)
             if contains_all(unique_value, self.alphabet):
                 self.supported_words[unique_value] = 1
             else:
