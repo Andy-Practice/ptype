@@ -61,8 +61,6 @@ class Trainer:
         self.labels = labels
         # self.unique_vals = np.concatenate([np.unique(df.values) for df in dfs])
         self.unique_vals = np.concatenate([pd.unique(df[col].values) for df in dfs for col in df.columns]) # np.concatenate([pd.unique(df.values) for df in dfs])
-        print('Test Code')
-        print(self.unique_vals)
         self.dfs_unique_vals_counts = Trainer.get_unique_vals_counts(dfs)
         self.machines.set_unique_values(self.unique_vals)
 
