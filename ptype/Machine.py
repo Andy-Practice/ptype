@@ -312,7 +312,7 @@ class Machine(object):
 
     def set_unique_values(self, unique_values):
         self.supported_words = {}
-
+        print('Test :len(unique_values)',len(unique_values))
         for unique_value in unique_values:
             if contains_all(unique_value, self.alphabet):
                 self.supported_words[unique_value] = 1
