@@ -35,7 +35,7 @@ class Machines:
 
     def set_unique_values(self, unique_values):
         print('debug check - Machines.set_unique_values()')
-        print(unique_values)
+        print(unique_value)
         #print(self.alphabet)
         for machine in self.machines:
             machine.set_unique_values(unique_values)
