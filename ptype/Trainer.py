@@ -115,6 +115,7 @@ class Trainer:
         error = 0.0
         for j, (df, df_labels) in enumerate(zip(dfs, labels)):
             for i, column_name in enumerate(list(df.columns)):
+                print(i,column_name,df_labels[i])
                 print(
                     column_name, self.f_col(all_probs, j, column_name, df_labels[i] - 1)
                 )
