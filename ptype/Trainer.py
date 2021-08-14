@@ -97,6 +97,7 @@ class Trainer:
 
         # Iterates over whole data points
         for n in range(max_iter):
+            print('Starting Iteration number:',n)
             # Trains machines using all of the training data frames
             self.update_PFSMs()
 
