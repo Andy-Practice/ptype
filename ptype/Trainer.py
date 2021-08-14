@@ -132,6 +132,7 @@ class Trainer:
         self.machines.set_all_probabilities_z(w_j_z)
 
         for machine in self.machines.forType.values():
+            print('update_PFSMs for machine',machine)
             machine.normalize()
 
     def conjugate_gradient(self, w, J=10, gtol=1e-5):
