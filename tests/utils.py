@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import datetime # AL-Added to timestamp output files. 
 
+print('Loading utils.py')
+
 # AL-Updated functions to allow user to specify whether they want results with all date types presented
 # together (option='dates_together') or individually (option='dates_separate'). The former is the default.
 
