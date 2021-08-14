@@ -18,6 +18,7 @@ class Ptype:
     """The ptype object."""
 
     def __init__(self):
+        'print(initialising Ptype...')
         self.types = [
             "integer",
             "string",
