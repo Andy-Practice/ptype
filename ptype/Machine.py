@@ -776,3 +776,13 @@ class SubTypeNonstdDate(Machine):
         )
         self.create_T_new()
         self.copy_to_z()
+
+class Date_Generic(Machine):
+    def __init__(self):
+        super().__init__()
+        self.STOP_P = 1e-4
+        self.pfsm_from_fsm(
+            '^(?:0[1-9]|1[12])/(?:[0-2][0-9]|3[01])/[0-9]{4}\s(?:0[0-9]|1[01]):(?:[0-5][0-9])\s(?:AM|PM)$'
+        )
+
+        
