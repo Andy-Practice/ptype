@@ -27,8 +27,7 @@ class Ptype:
             "date-non-std-subtype",
             "date-non-std",
         ]):
-        print('initialising Ptype...')
-        print('initialising Ptype with machines: machine_types')
+        print('initialising Ptype with machines:',machine_types)
         self.types = machine_types
         # self.types = [
         #     "integer",
