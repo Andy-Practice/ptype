@@ -17,16 +17,8 @@ from ptype.utils import normalize_log_probs, LOG_EPS
 class Ptype:
     """The ptype object."""
 
-    def __init__(self,machine_types = [
-            "integer",
-            "string",
-            "float",
-            "boolean",
-            "date-iso-8601",
-            "date-eu",
-            "date-non-std-subtype",
-            "date-non-std",
-        ]):
+    def __init__(self,machine_types = ["integer","string","float","boolean","date-iso-8601","date-eu",
+        "date-non-std-subtype","date-non-std",]):
         print('initialising Ptype with machines:',machine_types)
         self.types = machine_types
         # self.types = [
