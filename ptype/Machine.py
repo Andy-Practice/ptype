@@ -20,9 +20,9 @@ class Machine(object):
         self.alphabet = sorted(
             [str(i) for i in list(fsm_obj.alphabet) if str(i) != "anything_else"]
         )
-        print(fsm_obj.states)
+        
         self.add_states(list(fsm_obj.states))
-        print(self.states)
+        
         self.set_I(
             [np.log(1) if q == fsm_obj.initial else LOG_EPS for q in self.states]
         )
@@ -45,6 +45,7 @@ class Machine(object):
                 self.F[q_i] = 0.0
             else:
                 symbols_js = np.array(list(transition.keys()))
+                print(self.F[q_i])
                 dividend = 1.0 if self.F[q_i] == LOG_EPS else 1.0 - np.exp(self.F[q_i])
                 probs = np.array([dividend / len(symbols_js) for _ in symbols_js])
 
