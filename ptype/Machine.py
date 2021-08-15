@@ -20,7 +20,9 @@ class Machine(object):
         self.alphabet = sorted(
             [str(i) for i in list(fsm_obj.alphabet) if str(i) != "anything_else"]
         )
+        print(fsm_obj.states)
         self.add_states(list(fsm_obj.states))
+        print(self.states)
         self.set_I(
             [np.log(1) if q == fsm_obj.initial else LOG_EPS for q in self.states]
         )
