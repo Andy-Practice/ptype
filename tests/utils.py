@@ -19,20 +19,24 @@ def evaluate_model_type(annotations, predictions,option='dates_together'):
     type_rates = {t: {"TP": 0, "FP": 0, "TN": 0, "FN": 0} for t in types}
 
     if not option == 'dates_separate':
-        predictions = [
-            prediction.replace("date-eu", "date")
-            .replace("date-iso-8601", "date")
-            .replace("date-non-std-subtype", "date")
-            .replace("date-non-std", "date")
-            for prediction in predictions
-        ]
-        annotations = [
-            annotation.replace("date-eu", "date")
-            .replace("date-iso-8601", "date")
-            .replace("date-non-std-subtype", "date")
-            .replace("date-non-std", "date")
-            for annotation in annotations
-        ]
+        annotations = ['date' if 'date' in val else val for val in annotations]
+        predictions = ['date' if 'date' in val else val for val in predictions] 
+
+        # predictions = [
+        #     prediction.replace("date-eu", "date")
+        #     .replace("date-iso-8601", "date")
+        #     .replace("date-non-std-subtype", "date")
+        #     .replace("date-non-std", "date")
+        #     for prediction in predictions
+        # ]
+
+        # annotations = [
+        #     annotation.replace("date-eu", "date")
+        #     .replace("date-iso-8601", "date")
+        #     .replace("date-non-std-subtype", "date")
+        #     .replace("date-non-std", "date")
+        #     for annotation in annotations
+        # ]
 
     # find columns whose types are not supported by ptype
     ignored_columns = np.where(
@@ -147,34 +151,23 @@ def get_type_counts(predictions, annotations,option='dates_together'):
         ptype_predictions = predictions[dataset_name] # .values()
 
         if not option == 'dates_separate':
-            true_values = [
-                true_value.replace("date-eu", "date")
-                .replace("date-iso-8601", "date")
-                .replace("date-non-std-subtype", "date")
-                .replace("date-non-std", "date")
-                for true_value in true_values
-            ]
-            test_true_values_new = ['date' if 'date' in val else val for val in true_values]
-            print('\n-----',dataset_name,'------\n')
-            print('Test Comparison of old re-labelling vs. new')
-            for i in range(0,len(true_values)):
-                print(true_values[i],'---',test_true_values_new[i])
-            true_values = test_true_values_new
+            true_values = ['date' if 'date' in val else val for val in true_values]
+            ptype_predictions = ['date' if 'date' in val else val for val in ptype_predictions] 
 
-            ptype_predictions = [
-               prediction.replace("date-eu", "date")
-                .replace("date-iso-8601", "date")
-                .replace("date-non-std-subtype", "date")
-                .replace("date-non-std", "date")
-                for prediction in ptype_predictions
-            ]
-
-            test_ptype_preds_new = ['date' if 'date' in val else val for val in ptype_predictions]
-            print('Test Comparison of old re-labelling vs. new - ptype_predictions')
-            for i in range(0,len(ptype_predictions)):
-                print(ptype_predictions[i],'---',test_ptype_preds_new[i])
-            ptype_predictions = test_ptype_preds_new
-
+            # true_values = [
+            #     true_value.replace("date-eu", "date")
+            #     .replace("date-iso-8601", "date")
+            #     .replace("date-non-std-subtype", "date")
+            #     .replace("date-non-std", "date")
+            #     for true_value in true_values
+            # ]
+            # ptype_predictions = [
+            #    prediction.replace("date-eu", "date")
+            #     .replace("date-iso-8601", "date")
+            #     .replace("date-non-std-subtype", "date")
+            #     .replace("date-non-std", "date")
+            #     for prediction in ptype_predictions
+            # ]
 
         ignored_columns = np.where(
             (np.array(true_values) != "all identical")
