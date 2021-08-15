@@ -154,6 +154,13 @@ def get_type_counts(predictions, annotations,option='dates_together'):
                 .replace("date-non-std", "date")
                 for true_value in true_values
             ]
+            test_true_values_new = ['date' if 'date' in val else val for val in true_values]
+            print('\n-----',dataset_name,'------\n')
+            print('Test Comparison of old re-labelling vs. new')
+            for i in range(0,len(true_values)):
+                print(true_values[i],'---',test_true_values_new[i])
+            true_values = test_true_values_new
+
             ptype_predictions = [
                prediction.replace("date-eu", "date")
                 .replace("date-iso-8601", "date")
@@ -161,6 +168,13 @@ def get_type_counts(predictions, annotations,option='dates_together'):
                 .replace("date-non-std", "date")
                 for prediction in ptype_predictions
             ]
+
+            test_ptype_preds_new = ['date' if 'date' in val else val for val in ptype_predictions]
+            print('Test Comparison of old re-labelling vs. new - ptype_predictions')
+            for i in range(0,len(ptype_predictions)):
+                print(ptype_predictions[i],'---',test_ptype_preds_new[i])
+            ptype_predictions = test_ptype_preds_new
+
 
         ignored_columns = np.where(
             (np.array(true_values) != "all identical")
