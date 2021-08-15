@@ -792,3 +792,12 @@ class Date_Generic(Machine):
         self.create_T_new
         self.copy_to_z()
 
+class User_Defined_Machine(Machine):
+    def __init__(self,regex):
+        super().__init__()
+        self.STOP_P = 1e-4
+        self.regex = regex
+        self.pfsm_from_fsm(self.regex)
+        self.create_T_new
+        self.copy_to_z()
+
