@@ -149,6 +149,7 @@ class Trainer:
                 self.f_cols, self.g_cols, w, d[j], g[j], self.f_cols(w)
             )
             if res[0] is None:
+                print('After optimize.line_search() - res[0] is None')
                 return w, j
             else:
                 alpha = res[0]
