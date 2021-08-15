@@ -45,11 +45,11 @@ class Machine(object):
                 self.F[q_i] = 0.0
             else:
                 symbols_js = np.array(list(transition.keys()))
-                print(self.F[q_i])
+                # print(self.F[q_i])
                 dividend = 1.0 if self.F[q_i] == LOG_EPS else 1.0 - np.exp(self.F[q_i])
-                print(dividend)
+                # print(dividend)
                 probs = np.array([dividend / len(symbols_js) for _ in symbols_js])
-                print(probs)
+                # print(probs)
                 for q_j in np.unique(q_js):
                     idx = np.where(q_js == q_j)[0]
                     self.add_transitions(
