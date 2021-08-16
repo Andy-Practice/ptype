@@ -129,8 +129,7 @@ class Trainer:
         return error
 
     def update_PFSMs(self):
-        w_j_z, _ = self.conjugate_gradient(self.machines.get_all_parameters_z())
-        self.w_j_z = w_j_z # Added by AL to see what happens if first arg to line_search() is callable function rather than property that is never set. 
+        w_j_z, _ = self.conjugate_gradient(self.machines.get_all_parameters_z()) 
         self.machines.set_all_probabilities_z(w_j_z)
 
         for machine in self.machines.forType.values():
@@ -148,8 +147,8 @@ class Trainer:
                 d.append(-g[j])
 
             res = optimize.line_search(
-                self.f_cols(w_j_z), self.g_cols, w, d[j], g[j], self.f_cols(w) # why is first arg a property? It is never set and everywhere else is a function...
-            ) # AL Edit - shouldn't it be self.f_cols(w_j_z) ????
+                self.f_cols, self.g_cols, w, d[j], g[j], self.f_cols(w) # why is first arg a property? It is never set and everywhere else is a function...
+            ) # AL Edit - shouldn't it be self.f_cols(current parameters?) ????
             if res[0] is None:
                 print('After optimize.line_search() - res[0] is None')
                 return w, j
