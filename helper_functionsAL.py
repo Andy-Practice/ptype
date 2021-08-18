@@ -38,7 +38,7 @@ def get_total_confusion_values(annotations_dict,predictions_dict,ptype_types,opt
     if option == 'dates_separate':
         typ_labels = ptype_types
     else:
-        typ_labels = np.unique(['date' if 'date' in typ else typ for typ in ptype_hc.types])
+        typ_labels = np.unique(['date' if 'date' in typ else typ for typ in ptype_types])
 
     # Initialise the dictionary with zero values for each permutation
     tot_conf_hc = {t:{'TP':0,'FP':0,'TN':0,'FN':0} for t in typ_labels}
