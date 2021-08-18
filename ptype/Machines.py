@@ -15,7 +15,9 @@ MACHINES = {
     "date-non-std": Machine.Nonstd_Date(),
     "IPAddress": Machine.IPAddress(),
     "EmailAddress": Machine.EmailAddress(),
-    "date-gen": Machine.Date_Generic()
+    "date-gen-A": Machine.Date_Generic_A(),
+    "date-gen-B": Machine.Date_Generic_B(),
+    "date-gen-C": Machine.Date_Generic_C()
 }
 
 
