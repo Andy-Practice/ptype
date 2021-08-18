@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import datetime
 
+import ptype.tests.utils as ut
 
 def quick_timestamp():
     now = datetime.datetime.now()
@@ -41,19 +42,18 @@ def get_total_confusion_values(annotations_dict,predictions_dict,ptype_types,opt
         typ_labels = np.unique(['date' if 'date' in typ else typ for typ in ptype_types])
 
     # Initialise the dictionary with zero values for each permutation
-    tot_conf_hc = {t:{'TP':0,'FP':0,'TN':0,'FN':0} for t in typ_labels}
+    tot_conf = {t:{'TP':0,'FP':0,'TN':0,'FN':0} for t in typ_labels}
 
-  # print(tot_conf_hc)
-    # 
     cats = ['FN','TN','FP','TP']
     
-    for annot in annotations_hc.keys(): 
-        scores = ut.evaluate_model_type(annotations_hc[annot],predictions_hc[annot],option=option)
+    for annot in annotations_dict.keys(): 
+        scores = ut.evaluate_model_type(annotations_dict[annot],predictions_dict[annot],option=option)
       #print(scores)
         for i,typ in enumerate(scores):
             for cat in cats:
-                tot_conf_hc[typ][cat] += scores[typ][cat]
-    return tot_conf_hc
+                tot_conf[typ][cat] += scores[typ][cat]
+
+    return tot_conf
 
 
 
