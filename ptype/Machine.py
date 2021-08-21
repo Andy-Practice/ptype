@@ -799,22 +799,14 @@ class Date_Generic_B(Machine):
         self.create_T_new
         self.copy_to_z()
 
-class Date_Generic_C(Machine):
-    def __init__(self):
-        super().__init__()
-        self.STOP_P = 1e-4
-<<<<<<< HEAD
-        self.regex = "(([0-9]{1,4}[\-/.\s])+([0-9]{1,2}[\-/.\s])?([0-9]{1,4}[\-/.\s]?))?(\s*)(([0-9]{1,2}[:.])+[0-9]*)?|((19|20)([0-9]{2}))|(18|19|20([0-9]{2})?(0[0-9]|1[0-2])([0-2][0-9]|3[0-1]))|(0?[0-9]|1[0-9]|2[0-3])(([0-5][0-9]))"
-        #self.regex = "(([0-9]{1,4}[\-/.\s])+([0-9]{1,2}[\-/.\s])?([0-9]{1,4}[\-/.\s]?))?(\s*)(([0-9]{1,2}[:.])+[0-9]*)?"
-||||||| 93c7881 (Update Generic Date C with giga regex)
-        "(([0-9]{1,4}[\-/.\s])+([0-9]{1,2}[\-/.\s])?([0-9]{1,4}[\-/.\s]?))?(\s*)(([0-9]{1,2}[:.])+[0-9]*)?|((19|20)([0-9]{2}))|(18|19|20([0-9]{2})?(0[0-9]|1[0-2])([0-2][0-9]|3[0-1]))|(0?[0-9]|1[0-9]|2[0-3])(([0-5][0-9]))"
-        #self.regex = "(([0-9]{1,4}[\-/.\s])+([0-9]{1,2}[\-/.\s])?([0-9]{1,4}[\-/.\s]?))?(\s*)(([0-9]{1,2}[:.])+[0-9]*)?"
-=======
-        self.regex = "(([0-9]{1,4}[\-/.\s])+([0-9]{1,2}[\-/.\s])?([0-9]{1,4}[\-/.\s]?))?(\s*)(([0-9]{1,2}[:.])+[0-9]*)?"
->>>>>>> parent of 93c7881 (Update Generic Date C with giga regex)
-        self.pfsm_from_fsm(self.regex)
-        self.create_T_new
-        self.copy_to_z()
+# class Date_Generic_C(Machine):
+#     def __init__(self):
+#         super().__init__()
+#         self.STOP_P = 1e-4
+#         self.regex = "(([0-9]{1,4}[\-/.\s])+([0-9]{1,2}[\-/.\s])?([0-9]{1,4}[\-/.\s]?))?(\s*)(([0-9]{1,2}[:.])+[0-9]*)?"
+#         self.pfsm_from_fsm(self.regex)
+#         self.create_T_new
+#         self.copy_to_z()
 
 class User_Defined_Machine(Machine):
     def __init__(self,regex):
