@@ -57,14 +57,18 @@ def get_total_confusion_values(annotations_dict,predictions_dict,ptype_types,opt
 
 
 
-def prep_for_confusion_mat(annotations_dict,predictions_dict):
+def prep_for_confusion_mat(annotations_dict,predictions_dict,option='dates_together'):
     y = []
     y_pred = []
     labels = []
 
     for dataset in annotations_dict:
-        convert_annots = convert_to_date(annotations_dict[dataset],option='list')
-        convert_predicts = convert_to_date(predictions_dict[dataset],option='list')
+        if option == 'dates_together':
+            convert_annots = convert_to_date(annotations_dict[dataset],option='list')
+            convert_predicts = convert_to_date(predictions_dict[dataset],option='list')
+        elif option == 'dates_separate':
+            convert_annots = annotations_dict[dataset]
+            convert_predicts = predictions_dict[dataset]
         #labels = [item for item in annotations_testC[dataset] if item not in labels]
         y = y + convert_annots
         y_pred = y_pred + convert_predicts
