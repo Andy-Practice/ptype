@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import datetime
 
-import ptype.tests.utils as ut
+import tests.utils as ut
 
 def quick_timestamp():
     now = datetime.datetime.now()
@@ -45,7 +45,6 @@ def import_data_and_annotations(fullFilePath,rowData,option=None):
         
         # To filter out unsupported types at this stage, insert following code here. 
         # # # AnnotsList = [item for item in AnnorsList if item not in ptype.types] - where a list of types has been passed to the function
-            # Maybe clarify this with Taha??? 
         
         annotsDF = annotsDF[annotsDF['Column'].isin(AnnotsList)]
         
