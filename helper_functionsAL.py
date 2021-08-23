@@ -184,6 +184,40 @@ def prep_for_confusion_mat(annotations_dict,predictions_dict,option='dates_toget
         y_pred = y_pred + convert_predicts
     return y,y_pred
 
+
+# Generates matrices for multi-class ROC-AUC
+def get_evaluation_matrices(annotations_dict,predict_dict,classes,showOutput=False):
+  y_true_matrix = np.zeros(shape=(0,len(classes)),dtype=int)
+  y_score_matrix = np.zeros(shape=(0,len(classes)),dtype=int)
+  tot=0
+  for i,key in enumerate(predict_dict):
+    true = annotations_dict[key]
+    for j,pred in enumerate(predict_dict[key]):
+      t_label = true[j]
+      t_label = hf.convert_to_date(t_label)
+      # print(true)
+      pred = hf.convert_to_date(pred) # relabel predictions as dates for assessment. 
+      if t_label in classes:
+        p_i = [i for i,label in enumerate(classes) if label == pred]
+        t_i = [i for i,label in enumerate(classes) if label == t_label]
+        tot += 1
+        #print(pred,'-',p_i)
+        p_entry = np.zeros(shape=(1,len(classes)),dtype=int)
+        p_entry[0,p_i] = 1
+        t_entry = np.zeros(shape=(1,len(classes)),dtype=int)
+        t_entry[0,t_i] = 1
+        #print(tmp_row)
+        y_true_matrix = np.append(y_true_matrix,t_entry,axis=0)
+        y_score_matrix = np.append(y_score_matrix,p_entry,axis=0)
+        #bin_class_matrix = 
+      else:
+        if showOutput:
+          print(t_label,'not in classes list')
+  print('tot count:',tot,' -- matrix dimensions',y_true_matrix.shape, y_score_matrix.shape)
+  return y_true_matrix, y_score_matrix
+
+
+
 # Happily copied from https://github.com/DTrimarchi10/confusion_matrix - what a helpful fellow.
 def make_confusion_matrix(cf,
                           group_names=None,
