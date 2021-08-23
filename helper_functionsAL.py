@@ -74,6 +74,57 @@ def import_data_and_annotations(fullFilePath,rowData,option=None):
     return tmpDF,annotsDF
 
 
+def model_run(ptype,DatasetRef=DatasetLookup,option=None):
+    # Initialise objects to be returned.
+    ptype_Schemas = []
+    annotations_dict = {}
+    predictions_dict = {}
+    datasets_list = []
+
+    for rowNum,rowData in DatasetRef.iterrows():
+        print(rowNum)
+    
+        if not rowData['Skip']:
+        #if str(rowData['datasetID']) in(focusList):
+            # Create a full path folder using the specified folder (filePrefix) and Location info from DatasetLookup
+            fullFilePath = os.path.join(filePrefix,rowData['Location (relative)'])
+            
+            # User can specify if they want output shown.
+            if option == 'verbose':    
+                #print(fullFilePath)
+                print(rowData['datasetID'],'--',rowData['Location (relative)'])
+
+            dataDF,annotsDF = import_data_and_annotations(fullFilePath,rowData)
+            
+            if option =='verbose':
+                print(annotsDF.shape)
+            
+            schema = ptype.schema_fit(dataDF)
+            ptype_Schemas.append(schema)
+            #schema = ptype_too.shema_fit(dataDF)
+            #ptype_Schemas_too.append(shema)
+            
+            if option == 'verbose':
+                print(rowData['datasetID'],'schema fit Complete!')
+            
+            # Save the annotations file for later reference.
+            # annotations_DFs.append(annotsDF)
+            annotations_dict[rowData['datasetID']] = annotsDF.Type.tolist()
+            # Type inference - schema contains the ptype predictions...
+            schemaRatios = schema.show_ratios()
+            # ... a list of which are accessed like this.
+            predictions = schemaRatios[schemaRatios.index=='type'].values[0].tolist()
+            # Store the predictions in a dictionary, indexed by the datasetID
+            predictions_dict[rowData['datasetID']] = predictions
+            # Add the name of the dataset to a list that is returned for future reference. 
+            datasets_list.append(rowData['datasetID'])
+            print('-------')
+            
+    return datasets_list,predictions_dict,annotations_dict,ptype_Schemas
+
+
+
+# Convert to date is used to change any label or prediction containing 'date' to have the value 'date'
 def convert_to_date(annots,option='string'):
     if option == 'string':
         if 'date' in annots:
