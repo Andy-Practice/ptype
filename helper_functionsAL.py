@@ -77,7 +77,7 @@ def import_data_and_annotations(fullFilePath,rowData,option=None):
     return tmpDF,annotsDF
 
 
-def model_run(ptype,DatasetRef,option=None):
+def model_run(ptype,DatasetRef,option=None,filePrefix):
     # Initialise objects to be returned.
     ptype_Schemas = []
     annotations_dict = {}
