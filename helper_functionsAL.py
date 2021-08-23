@@ -131,6 +131,16 @@ def model_run(ptype,DatasetRef,filePrefix,option=None):
 
 # ======= Model Evaluation Code ======= # 
 
+def import_col_data(dataset,colNum,filePrefix,DatasetRef):
+    # Get the relevant rowData for the dataset from the lookup - info required to import data from file. 
+    rowData = DatasetRef[DatasetRef['datasetID'] == dataset]
+    
+    relativeLocation = rowData['Location (relative)'].values[0]
+    fullFilePath = os.path.join(filePrefix,relativeLocation)
+
+    tmpDF = pd.read_csv(os.path.join(fullFilePath,'data.csv'),header=header_option(rowData['Header Option'].values[0]),encoding=rowData['Encoding'].values[0],dtype=str)
+    column = tmpDF.iloc[:,colNum]
+    return colNum, column
 # Convert to date is used to change any label or prediction containing 'date' to have the value 'date'
 def convert_to_date(annots,option='string'):
     if option == 'string':
