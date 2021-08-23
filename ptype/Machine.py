@@ -808,16 +808,6 @@ class Date_Generic_C(Machine):
         self.create_T_new
         self.copy_to_z()
 
-
-# class Date_Generic_C(Machine):
-#     def __init__(self):
-#         super().__init__()
-#         self.STOP_P = 1e-4
-#         self.regex = "(([0-9]{1,4}[\-/.\s])+([0-9]{1,2}[\-/.\s])?([0-9]{1,4}[\-/.\s]?))?(\s*)(([0-9]{1,2}[:.])+[0-9]*)?"
-#         self.pfsm_from_fsm(self.regex)
-#         self.create_T_new
-#         self.copy_to_z()
-
 class User_Defined_Machine(Machine):
     def __init__(self,regex):
         super().__init__()
