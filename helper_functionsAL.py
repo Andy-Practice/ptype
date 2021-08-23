@@ -14,18 +14,19 @@ import os
 
 import tests.utils as ut
 
+# Prints a timestamp. Becuase timestamps are helpful
 def quick_timestamp():
     now = datetime.datetime.now()
     print ("Cell Run At: ",now.strftime("%Y-%m-%d %H:%M:%S"))
     return now
 
-
+# test_function() to make sure module has loaded correctly
 def test_function():
     for i in range(0,3):
         print('Hi! my name is,')
     print('Chika chika slim shady.')
 
-
+# Tels import function what to do with some header options
 def header_option(HeaderOptionIn):
     if HeaderOptionIn == 'unknown':
         return 'infer'  #  None 
@@ -34,7 +35,8 @@ def header_option(HeaderOptionIn):
     else:
         return HeaderOptionIn
 
-
+# Imports and returns a given dataset and annotations
+# option = 'verbose' prints output showing progress
 def import_data_and_annotations(fullFilePath,rowData,option=None):
     # Where,
     # fullFilePath is a string containng the path of the folder containing data.csv and annotations.csv
@@ -78,7 +80,8 @@ def import_data_and_annotations(fullFilePath,rowData,option=None):
         
     return tmpDF,annotsDF
 
-
+# Performs type inference by looping over all the dataset lookups passed in DatasetRef
+# To save memory, the datasets are used then discarded. 
 def model_run(ptype,DatasetRef,filePrefix,option=None):
     # Initialise objects to be returned.
     ptype_Schemas = []
@@ -87,7 +90,8 @@ def model_run(ptype,DatasetRef,filePrefix,option=None):
     datasets_list = []
 
     for rowNum,rowData in DatasetRef.iterrows():
-        print(rowNum)
+        if option == 'verbose':
+            print('importing:',rowNum,rowData['datasetID'])
     
         if not rowData['Skip']:
         #if str(rowData['datasetID']) in(focusList):
@@ -131,6 +135,7 @@ def model_run(ptype,DatasetRef,filePrefix,option=None):
 
 # ======= Model Evaluation Code ======= # 
 
+# Function obtains a speficied column (colNum) from a given dataset using the DatasetLookup (DatasetRef)
 def import_col_data(dataset,colNum,filePrefix,DatasetRef):
     # Get the relevant rowData for the dataset from the lookup - info required to import data from file. 
     rowData = DatasetRef[DatasetRef['datasetID'] == dataset]
@@ -141,6 +146,7 @@ def import_col_data(dataset,colNum,filePrefix,DatasetRef):
     tmpDF = pd.read_csv(os.path.join(fullFilePath,'data.csv'),header=header_option(rowData['Header Option'].values[0]),encoding=rowData['Encoding'].values[0],dtype=str)
     column = tmpDF.iloc[:,colNum]
     return colNum, column
+
 # Convert to date is used to change any label or prediction containing 'date' to have the value 'date'
 def convert_to_date(annots,option='string'):
     if option == 'string':
@@ -154,7 +160,7 @@ def convert_to_date(annots,option='string'):
     else:
         return 'option not specified'
 
-
+# Returns values to be fed into confusion matrix
 def get_total_confusion_values(annotations_dict,predictions_dict,ptype_types,option='dates_together'):
 
   # Gives total no of TP, FP, TN and TP for each type. 
@@ -178,7 +184,7 @@ def get_total_confusion_values(annotations_dict,predictions_dict,ptype_types,opt
     return tot_conf
 
 
-
+# Prepares data so that confusion matrix can be generated
 def prep_for_confusion_mat(annotations_dict,predictions_dict,option='dates_together'):
     y = []
     y_pred = []
@@ -229,7 +235,7 @@ def get_evaluation_matrices(annotations_dict,predict_dict,classes,showOutput=Fal
   return y_true_matrix, y_score_matrix
 
 
-
+# Generates confusion matrix plots
 # Happily copied from https://github.com/DTrimarchi10/confusion_matrix - what a helpful fellow.
 def make_confusion_matrix(cf,
                           group_names=None,
