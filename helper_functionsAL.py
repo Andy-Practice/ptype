@@ -1,6 +1,8 @@
 
 from sklearn.metrics import confusion_matrix
 from scipy import interp
+from sklearn.metrics import roc_curve, auc
+
 from itertools import cycle
 
 import seaborn as sns
