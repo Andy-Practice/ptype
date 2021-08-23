@@ -1,5 +1,8 @@
 
 from sklearn.metrics import confusion_matrix
+from scipy import interp
+from itertools import cycle
+
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -124,6 +127,8 @@ def model_run(ptype,DatasetRef,option=None):
 
 
 
+# ======= Model Evaluation Code ======= # 
+
 # Convert to date is used to change any label or prediction containing 'date' to have the value 'date'
 def convert_to_date(annots,option='string'):
     if option == 'string':
@@ -179,6 +184,7 @@ def prep_for_confusion_mat(annotations_dict,predictions_dict,option='dates_toget
         y_pred = y_pred + convert_predicts
     return y,y_pred
 
+# Happily copied from https://github.com/DTrimarchi10/confusion_matrix - what a helpful fellow.
 def make_confusion_matrix(cf,
                           group_names=None,
                           categories='auto',
@@ -274,3 +280,60 @@ def make_confusion_matrix(cf,
     
     if title:
         plt.title(title)
+
+
+# Code sourced from https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
+def show_roc_auc(y_true_matrix,y_score_matrix,classes,title):
+
+  fpr = dict()
+  tpr = dict()
+  roc_auc = dict()
+  for i in range(len(classes)):
+    fpr[i], tpr[i], _ = roc_curve(y_true_matrix[:, i], y_score_matrix[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+  # Compute micro-average ROC curve and ROC area
+  fpr["micro"], tpr["micro"], _ = roc_curve(y_true_matrix.ravel(), y_score_matrix.ravel())
+  roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+
+  # First aggregate all false positive rates
+  all_fpr = np.unique(np.concatenate([fpr[i] for i in range(len(classes))]))
+
+  # Then interpolate all ROC curves at this points
+  mean_tpr = np.zeros_like(all_fpr)
+  for i in range(len(classes)):
+    mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+  # Finally average it and compute AUC
+  mean_tpr /= len(classes) # n_classes
+
+  fpr["macro"] = all_fpr
+  tpr["macro"] = mean_tpr
+  roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+
+  # Plot all ROC curves
+  plt.figure()
+  plt.plot(fpr["micro"], tpr["micro"],
+         label='micro-average ROC curve (area = {0:0.2f})'
+               ''.format(roc_auc["micro"]),
+         color='deeppink', linestyle=':', linewidth=4)
+
+  plt.plot(fpr["macro"], tpr["macro"],
+         label='macro-average ROC curve (area = {0:0.2f})'
+               ''.format(roc_auc["macro"]),
+         color='navy', linestyle=':', linewidth=4)
+
+  colors = cycle(['aqua', 'darkorange','pink' ,'purple','red'])
+  for i, color in zip(range(len(classes)), colors):
+    plt.plot(fpr[i], tpr[i], color=color, 
+             label='ROC curve of class {0} (area = {1:0.2f})'
+             ''.format(classes[i], roc_auc[i]))
+
+  plt.plot([0, 1], [0, 1], 'k--')#, lw=lw)
+  plt.xlim([0.0, 1.0])
+  plt.ylim([0.0, 1.05])
+  plt.xlabel('False Positive Rate')
+  plt.ylabel('True Positive Rate')
+  plt.title(title)
+  plt.legend(loc="lower right")
+  plt.show()
