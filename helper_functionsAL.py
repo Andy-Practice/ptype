@@ -194,9 +194,9 @@ def get_evaluation_matrices(annotations_dict,predict_dict,classes,showOutput=Fal
     true = annotations_dict[key]
     for j,pred in enumerate(predict_dict[key]):
       t_label = true[j]
-      t_label = hf.convert_to_date(t_label)
+      t_label = convert_to_date(t_label)
       # print(true)
-      pred = hf.convert_to_date(pred) # relabel predictions as dates for assessment. 
+      pred = convert_to_date(pred) # relabel predictions as dates for assessment. 
       if t_label in classes:
         p_i = [i for i,label in enumerate(classes) if label == pred]
         t_i = [i for i,label in enumerate(classes) if label == t_label]
