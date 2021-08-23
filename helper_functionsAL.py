@@ -20,6 +20,60 @@ def test_function():
     print('Chika chika slim shady.')
 
 
+def header_option(HeaderOptionIn):
+    if HeaderOptionIn == 'unknown':
+        return 'infer'  #  None 
+    elif HeaderOptionIn == 'None':
+        return None
+    else:
+        return HeaderOptionIn
+
+
+def import_data_and_annotations(fullFilePath,rowData,option=None):
+        # Where,
+            # fullFilePath is a string containng the path of the folder containing data.csv and annotations.csv
+            # rowData is the entry from the lookup .csv file which specifies import parameters for the dataset.     
+        #Import the .csv files
+            # Import should be done exactly this way to avoid errors resulting from the dataset
+        tmpDF = pd.read_csv(os.path.join(fullFilePath,'data.csv'),header=header_option(rowData['Header Option']),encoding=rowData['Encoding'],dtype=str)
+        
+        #print('Data Columns',tmpDF.columns)
+        annotsDF = pd.read_csv(os.path.join(fullFilePath,'annotations.csv'),dtype=str)
+        annotsDF = annotsDF[['Column','Type']]
+            
+        AnnotsList = [item for item in annotsDF['Column'].values if not pd.isnull(item) ] # item != 'nan'] # not np.isnan(item)] #  'nan']
+        
+        # To filter out unsupported types at this stage, insert following code here. 
+        # # # AnnotsList = [item for item in AnnorsList if item not in ptype.types] - where a list of types has been passed to the function
+            # Maybe clarify this with Taha??? 
+        
+        annotsDF = annotsDF[annotsDF['Column'].isin(AnnotsList)]
+        
+        annotsDF['Column'] = annotsDF['Column'].str.replace(' ','')
+              
+        # Cleaning - remove spaces from data headers and ensure they are of type string 
+        dataColList = tmpDF.columns
+        cleanDataColList = [str(item).replace(' ','') for item in dataColList]
+        
+        tmpDF.columns = cleanDataColList
+        
+        if option == 'verbose':
+            chkList = []
+            for i,item in enumerate(list(tmpDF.columns)):
+                try:
+                    #currentAnnotation = str(AnnotsList[i])
+                    chk = item == annotsDF['Column'][i]
+                    chkList.append(chk)
+                except:
+                    print("!!!! something didn't work there !!!!!!")
+                    chk = False
+            # Now total the errors. 
+            chkNum = [err for err in chkList if err == False]
+            print('========== N Errors:',len(chkNum),'===============')
+        
+        return tmpDF,annotsDF
+
+
 def convert_to_date(annots,option='string'):
     if option == 'string':
         if 'date' in annots:
